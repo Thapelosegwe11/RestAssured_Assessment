@@ -1,10 +1,12 @@
 package tests;
 
 import org.testng.annotations.Test;
-import requestBuilder.AuthRequestBuilder;
+import requestBuilder.InstructorRequestBuilder;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
+import static requestBuilder.InstructorRequestBuilder.activeGroupId;
+
 
 public class InstructorTests {
 
@@ -14,10 +16,9 @@ public class InstructorTests {
     static String invalidPassword = "invalidPassword";
 
     @Test
-    public void testInstructorLogin(){
-        //Accessing the request method with the response we need to test.
+    public void testPositiveLogin(){
 
-        AuthRequestBuilder.instructorLogin(email,password)
+        InstructorRequestBuilder.instructorLogin(email,password)
                 .then()
                 .log().all()
                 .assertThat()
@@ -26,4 +27,55 @@ public class InstructorTests {
                 .body("message",equalTo("Login successful"))
                 .body("data.token",notNullValue());
     }
+
+    @Test
+    public void testNegativeLogin(){
+
+        InstructorRequestBuilder.instructorLogin(invalidEmail,invalidPassword)
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(401)
+                .body("success",equalTo(false))
+                .body("message",equalTo("Invalid email or password"))
+                .body("error_code",equalTo("INVALID_CREDENTIALS"));
+    }
+
+    @Test(dependsOnMethods = "testPositiveLogin")
+    public void testGetGroupId(){
+
+        InstructorRequestBuilder.getGroupId()
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
+                .body("success",equalTo(true))
+                .body("message",equalTo("Active groups retrieved successfully"))
+                .body("data",notNullValue());
+    }
+
+    @Test(dependsOnMethods = {"testPositiveLogin"})
+    public void testCreateTask(){
+
+        String title = "StringHOPE THIS WORKS";
+        String description = "StringTesting";
+        String groupId = InstructorRequestBuilder.activeGroupId;
+        String priority = "HIGH ";
+        String dueDate = "2026-08-29T14:25:37.392Z";
+        String studentId = "oh myGod";
+        String url = "noIdeaWhatImDoing";
+        String name = "Even Here Im lost haha";
+        String documents = "omh my lord";
+
+        InstructorRequestBuilder.createTask(title,description,groupId,priority,dueDate,studentId,url,name,documents)
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(201)
+                .body("success",equalTo(true))
+                .body("message",equalTo("Task created successfully"))
+                .body("data.id",notNullValue());
+    }
+
+
 }
