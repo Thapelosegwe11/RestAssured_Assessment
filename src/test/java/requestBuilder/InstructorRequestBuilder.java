@@ -119,4 +119,21 @@ public class InstructorRequestBuilder {
 
         return response;
     }
+
+    public static Response deleteUpdatedTask(){
+
+        String Endpoint = "/APIDEV/instructor/tasks/" + updatedTaskId;
+
+        Response response = given()
+                    .baseUri(BASE_URL)
+                    .basePath(Endpoint)
+                    .contentType(ContentType.JSON)
+                    .header("Authorization","Bearer " + userToken)
+                .when()
+                    .delete()
+                .then()
+                    .extract().response();
+
+        return response;
+    }
 }

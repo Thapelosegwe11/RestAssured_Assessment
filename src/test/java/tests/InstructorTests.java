@@ -98,6 +98,7 @@ public class InstructorTests {
 
     @Test(dependsOnMethods = {"testPositiveLogin","testCreateTask","testUpdateTask"})
     public void testGetUpdatedTask(){
+
         InstructorRequestBuilder.getUpdatedTask()
                 .then()
                 .log().all()
@@ -105,5 +106,14 @@ public class InstructorTests {
                 .statusCode(200);
     }
 
+    @Test(dependsOnMethods = {"testPositiveLogin","testCreateTask","testUpdateTask","testGetUpdatedTask"})
+    public void testDeleteUpdatedTask(){
 
+        InstructorRequestBuilder.deleteUpdatedTask()
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
+                .body("success",equalTo(true));
+    }
 }
