@@ -52,7 +52,7 @@ public class InstructorRequestBuilder {
                 .then()
                     .extract().response();
 
-        activeGroupId = response.jsonPath().getString("data.Id");
+        activeGroupId = response.jsonPath().getString("data[0].Id");
         System.out.println("LOOK AT GOD! HAHA: " + activeGroupId);
         //KEEP LEARNING KEEP GROWING.
 
@@ -99,6 +99,23 @@ public class InstructorRequestBuilder {
 
         updatedTaskId = response.jsonPath().getString("data.id");
         System.out.println("UPDATED TASK ID: " + updatedTaskId );
+
+        return response;
+    }
+
+    public static Response getUpdatedTask(){
+
+        String Endpoint = "/APIDEV/instructor/tasks/" + updatedTaskId +"/completions";
+
+        Response response = given()
+                    .baseUri(BASE_URL)
+                    .basePath(Endpoint)
+                    .contentType(ContentType.JSON)
+                    .header("Authorization","Bearer " + userToken)
+                .when()
+                    .get()
+                .then()
+                    .extract().response();
 
         return response;
     }
