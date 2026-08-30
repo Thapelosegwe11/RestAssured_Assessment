@@ -25,8 +25,19 @@ public class InstructorPayload {
         createTask.put("priority", priority);
         createTask.put("dueDate", dueDate);
         createTask.put("studentId", studentId);
-        createTask.put("url", url);
-        createTask.put("name", name);
+
+        JSONArray studentIds = new JSONArray();
+        studentIds.add(0,studentId);
+
+        createTask.put("studentIds", studentIds);
+
+        JSONArray documents = new JSONArray();
+        JSONObject docs = new JSONObject();
+        docs.put("url","String");
+        docs.put("name","String");
+        documents.add(0,docs);
+
+        createTask.put("documents", documents);
 
        return  createTask;
     }
