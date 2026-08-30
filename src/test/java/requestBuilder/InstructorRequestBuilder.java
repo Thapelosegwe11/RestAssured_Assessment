@@ -12,6 +12,8 @@ public class InstructorRequestBuilder {
     public static String userToken;
     public static String activeGroupId;
     public static String createdTaskId;
+    public static String studentID;
+    public static String updatedTaskId;
 
     public static Response instructorLogin(String email, String password) {
 
@@ -28,7 +30,10 @@ public class InstructorRequestBuilder {
                     .extract().response();
 
         userToken = response.jsonPath().getString("data.token");
-        System.out.println("Retrieved token: " + userToken);
+        System.out.println("RETRIEVED TOKEN: " + userToken);
+
+        studentID = response.jsonPath().getString("data.user.id");
+        System.out.print("RETRIEVED STUDENT ID: " + studentID);
 
         return response;
     }
@@ -48,7 +53,7 @@ public class InstructorRequestBuilder {
                     .extract().response();
 
         activeGroupId = response.jsonPath().getString("data.Id");
-        System.out.println("Look at God: " + activeGroupId);
+        System.out.println("LOOK AT GOD! HAHA: " + activeGroupId);
         //KEEP LEARNING KEEP GROWING.
 
         return response;
@@ -71,7 +76,29 @@ public class InstructorRequestBuilder {
                     .extract().response();
 
         createdTaskId = response.jsonPath().getString("data.id");
-        System.out.println("Created TaskId: " + createdTaskId);
+        System.out.println("CREATED TASK ID: " + createdTaskId);
+
+        return response;
+    }
+
+    public static Response updateTask
+            (String tittle, String description, String groupId, String priority, String dueDate, String studentId){
+
+        String Endpoint = "/APIDEV/instructor/tasks/"+createdTaskId;
+
+        Response response = given()
+                    .baseUri(BASE_URL)
+                    .basePath(Endpoint)
+                    .contentType(ContentType.JSON)
+                    .header("Authorization","Bearer " + userToken)
+                    .body(InstructorPayload.createTaskPayload(tittle, description, groupId, priority, dueDate, studentId))
+                .when()
+                    .put()
+                .then()
+                    .extract().response();
+
+        updatedTaskId = response.jsonPath().getString("data.id");
+        System.out.println("UPDATED TASK ID: " + updatedTaskId );
 
         return response;
     }
