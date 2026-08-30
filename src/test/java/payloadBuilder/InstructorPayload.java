@@ -1,5 +1,6 @@
 package payloadBuilder;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 public class InstructorPayload {
@@ -15,11 +16,10 @@ public class InstructorPayload {
     }
 
     public static JSONObject createTaskPayload
-            (String tittle, String description, String groupId, String priority, String dueDate, String studentId, String url, String name,String documents){
+            (String title, String description, String groupId, String priority, String dueDate, String studentId){
 
         JSONObject createTask = new JSONObject();
-
-        createTask.put("tittle",tittle);
+        createTask.put("title",title);
         createTask.put("description", description);
         createTask.put("groupId", groupId);
         createTask.put("priority", priority);
@@ -39,6 +39,6 @@ public class InstructorPayload {
 
         createTask.put("documents", documents);
 
-       return  createTask;
+        return  createTask;
     }
 }

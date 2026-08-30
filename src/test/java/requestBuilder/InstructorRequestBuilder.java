@@ -47,7 +47,7 @@ public class InstructorRequestBuilder {
                 .then()
                     .extract().response();
 
-        activeGroupId = response.jsonPath().getString("data[0].Id");
+        activeGroupId = response.jsonPath().getString("data.Id");
         System.out.println("Look at God: " + activeGroupId);
         //KEEP LEARNING KEEP GROWING.
 
@@ -55,20 +55,20 @@ public class InstructorRequestBuilder {
     }
 
     public static Response createTask
-            (String tittle, String description, String groupId, String priority, String dueDate, String studentId, String url, String name, String documents){
+            (String tittle, String description, String groupId, String priority, String dueDate, String studentId){
 
         String Endpoint = "/APIDEV/instructor/tasks";
 
         Response response = given()
-                .baseUri(BASE_URL)
-                .basePath(Endpoint)
-                .contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + userToken)
-                .body(InstructorPayload.createTaskPayload(tittle, description, activeGroupId, priority, dueDate, studentId, url, name,documents))
+                    .baseUri(BASE_URL)
+                    .basePath(Endpoint)
+                    .contentType(ContentType.JSON)
+                    .header("Authorization", "Bearer " + userToken)
+                    .body(InstructorPayload.createTaskPayload(tittle, description, groupId, priority, dueDate, studentId))
                 .when()
-                .post()
+                    .post()
                 .then()
-                .extract().response();
+                    .extract().response();
 
         createdTaskId = response.jsonPath().getString("data.id");
         System.out.println("Created TaskId: " + createdTaskId);

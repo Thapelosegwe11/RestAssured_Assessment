@@ -57,17 +57,15 @@ public class InstructorTests {
     @Test(dependsOnMethods = {"testPositiveLogin"})
     public void testCreateTask(){
 
-        String title = "StringHOPE THIS WORKS";
-        String description = "StringTesting";
+        String title = "Testing";
+        String description = "TestingCreateTask";
         String groupId = InstructorRequestBuilder.activeGroupId;
         String priority = "HIGH ";
         String dueDate = "2026-08-29T14:25:37.392Z";
         String studentId = "oh myGod";
-        String url = "noIdeaWhatImDoing";
-        String name = "Even Here Im lost haha";
-        String documents = "omh my lord";
 
-        InstructorRequestBuilder.createTask(title,description,groupId,priority,dueDate,studentId,url,name,documents)
+
+        InstructorRequestBuilder.createTask(title,description,groupId,priority,dueDate,studentId)
                 .then()
                 .log().all()
                 .assertThat()
