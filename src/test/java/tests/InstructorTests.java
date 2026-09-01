@@ -1,24 +1,39 @@
 package tests;
 
+import com.github.javafaker.Faker;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 import requestBuilder.InstructorRequestBuilder;
+import testData.DBConnection;
+
+import java.sql.SQLException;
 
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 import static requestBuilder.InstructorRequestBuilder.activeGroupId;
+import static testData.DBConnection.*;
 
 
 public class InstructorTests {
 
-    static String email = "segwe.bz@gmail.com";
-    static String password = "rA!ny@$14";
-    static String invalidEmail = "invalidEmail";
-    static String invalidPassword = "invalidPassword";
+    public static String invalidEmail;
+    public static String invalidPassword;
+
+    static Faker faker = new Faker();
+
+    @BeforeClass
+    public static void setupData() throws SQLException {
+
+        invalidEmail = faker.internet().emailAddress();
+        invalidPassword = faker.internet().password();
+
+        DBConnection.getConnection();
+    }
 
     @Test
     public void testPositiveLogin(){
 
-        InstructorRequestBuilder.instructorLogin(email,password)
+        InstructorRequestBuilder.instructorLogin(DBConnection.emailFromDB, DBConnection.passwordFromDB)
                 .then()
                     .log().all()
                 .assertThat()
