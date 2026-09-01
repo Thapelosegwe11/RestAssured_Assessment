@@ -1,0 +1,366 @@
+{
+  "info": {
+    "_postman_id": "01be7ad2-2f63-4d6b-b472-9ad275571d4c",
+    "name": "Task API FLOW",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57097968",
+    "_collection_link": "https://go.postman.co/collection/57097968-01be7ad2-2f63-4d6b-b472-9ad275571d4c?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Message returns string\", function () {",
+                  "    pm.expect(pm.response.text()).to.include(\"Login successful\");",
+                  "});",
+                  "",
+                  "pm.test(\"Verify user role\", function () {",
+                  "    let response = pm.response.json();",
+                  "    pm.expect(pm.response.text()).to.include(\"admin\");",
+                  "});",
+                  "",
+                  "pm.test(\"Response time is less than 2000ms\", function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});",
+                  "",
+                  "",
+                  "// Convert Response to json",
+                  "",
+                  "let response = pm.response.json();",
+                  "",
+                  "// Extract token.",
+                  "",
+                  "let token = response.data.token;",
+                  "",
+                  "// Set tokenin environment variable.",
+                  "",
+                  "pm.environment.set(\"token\", token);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "",
+                "value": "",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"email\": \"segwe.bz@gmail.com\",\r\n  \"password\": \"rA!ny@$14\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/login",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "UserProfile",
+      "item": [
+        {
+          "name": "profile",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "pm.test(\"Body matches string\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Profile retrieved successfully\");\r",
+                  "});\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}} ",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/profile",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "profile"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "InstructorTasks",
+      "item": [
+        {
+          "name": "CreateTask",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 201\", function () {\r",
+                  "    pm.response.to.have.status(201);\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Body matches string\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Task created successfully\")\r",
+                  "});\r",
+                  "\r",
+                  "// Convert response to json\r",
+                  "\r",
+                  "let response = pm.response.json();\r",
+                  "\r",
+                  "// Extraxct taskId.\r",
+                  "let taskId = response.data.id;\r",
+                  "\r",
+                  "// seSet token in environment variable. \r",
+                  "//pm.environment.set(\"taskId\",\"taskiId\");\r",
+                  "pm.environment.set(\"taskId\", taskId);\r",
+                  "\r",
+                  "\r",
+                  ""
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"stringTesting\",\r\n  \"description\": \"stringHope this works\",\r\n  \"groupId\": \"81c04f9e-668e-47f4-9818-9174eeafe3cc\",\r\n  \"priority\": \"medium\",\r\n  \"dueDate\": \"2026-08-21T12:16:10.206Z\",\r\n  \"studentIds\": [\r\n    \"5e57d440-5713-47af-8562-a3f3ab12a5ea\"\r\n  ],\r\n  \"studentId\": \"5e57d440-5713-47af-8562-a3f3ab12a5ea\",\r\n  \"documents\": [\r\n    {\r\n      \"url\": \"https://www.ndosiautomation.co.za/APIDEV/instructor/tasks\",\r\n      \"name\": \"2ndtry\"\r\n    }\r\n  ]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/instructor/tasks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "instructor",
+                "tasks"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "UpdateTask",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "pm.test(\"Body matches string\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Task updated successfully\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"title\": \"Update Succesful\",\r\n  \"description\": \"stringHope this works\",\r\n  \"groupId\": \"81c04f9e-668e-47f4-9818-9174eeafe3cc\",\r\n  \"priority\": \"medium\",\r\n  \"dueDate\": \"2026-08-21T12:16:10.206Z\",\r\n  \"studentIds\": [\r\n    \"5e57d440-5713-47af-8562-a3f3ab12a5ea\"\r\n  ],\r\n  \"studentId\": \"5e57d440-5713-47af-8562-a3f3ab12a5ea\",\r\n  \"documents\": [\r\n    {\r\n      \"url\": \"https://www.ndosiautomation.co.za/APIDEV/instructor/tasks\",\r\n      \"name\": \"2ndtry\"\r\n    }\r\n  ]\r\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/instructor/tasks/{{taskId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "instructor",
+                "tasks",
+                "{{taskId}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "GetTaskCompletions",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test(\"Response has success flag\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains task and completions data\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('task');",
+                  "    pm.expect(jsonData.data).to.have.property('completions');",
+                  "    pm.expect(jsonData.data.completions).to.be.an('array');",
+                  "});",
+                  "",
+                  "pm.test(\"Response contains stats\", function () {",
+                  "    const jsonData = pm.response.json();",
+                  "    pm.expect(jsonData.data).to.have.property('stats');",
+                  "    pm.expect(jsonData.data.stats).to.have.property('totalAssigned');",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/instructor/tasks/{{taskId}}/completions?",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "instructor",
+                "tasks",
+                "{{taskId}}",
+                "completions"
+              ],
+              "query": [
+                {
+                  "key": "",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "DeleteTask",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test(\"Status code is 200\", function () {\r",
+                  "    pm.response.to.have.status(200);\r",
+                  "});\r",
+                  "pm.test(\"Body matches string\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"true\");\r",
+                  "});\r",
+                  "\r",
+                  "pm.test(\"Body matches string\", function () {\r",
+                  "    pm.expect(pm.response.text()).to.include(\"Task deleted successfully\");\r",
+                  "});"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/instructor/tasks/{{taskId}}",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "instructor",
+                "tasks",
+                "{{taskId}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
