@@ -136,4 +136,21 @@ public class InstructorRequestBuilder {
 
         return response;
     }
+    public static Response getCourses(String level){
+
+        String Endpoint = "/APIDEV/courses";
+
+        Response response = given()
+                    .baseUri(BASE_URL)
+                    .basePath(Endpoint)
+                    .header("Aythorization", "Bearer " + userToken)
+                    .contentType(ContentType.JSON)
+                    .queryParam("level",level)
+                .when()
+                    .get()
+                .then()
+                    .extract().response();
+
+        return response;
+    }
 }

@@ -72,7 +72,7 @@ public class InstructorTests {
     @Test(dependsOnMethods = {"testPositiveLogin", "testGetGroupId"})
     public void testCreateTask(){
 
-        String title = "firstTest";
+        String title = "FirstTest";
         String description = "TestingCreateTask";
         String groupId = InstructorRequestBuilder.activeGroupId;
         String priority = "medium";
@@ -131,4 +131,17 @@ public class InstructorTests {
                 .statusCode(200)
                 .body("success",equalTo(true));
     }
+    @Test
+    public void testGetCourses(){
+
+        InstructorRequestBuilder.getCourses("beginner")
+                .then()
+                .log().all()
+                .assertThat()
+                .statusCode(200)
+                .body("success",equalTo(true))
+                .body("message", equalTo("Courses retrieved successfully"))
+                .body("data",notNullValue());
+    }
+
 }
